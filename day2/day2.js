@@ -1,21 +1,20 @@
-const fs = require('fs');
+const {
+  scoreForShape,
+  scoreForOutcome,
+  transformOutcome,
+  lossMap,
+  winMap,
+} = require('./constants');
+const { getData } = require('../utils/utils');
 const path = require('path');
-const { scoreForShape, scoreForOutcome, transformOutcome, lossMap, winMap } = require('./constants');
 
 const task1 = (data) => {
   let txtData = [];
-  if (!data) txtData = getData();
+  if (!data) txtData = getData(path.resolve(__dirname, './data.txt'));
 
   const eachScore = getEachScore(txtData.length ? txtData : data, 'task1');
   const totalScore = getTotalScore(eachScore);
   return totalScore;
-};
-
-const getData = () => {
-  return fs
-    .readFileSync(path.resolve(__dirname, './data.txt'), 'utf8')
-    .toString()
-    .split('\n');
 };
 
 const getWinner = (p1, p2) => {
@@ -37,7 +36,7 @@ const getWinner = (p1, p2) => {
   if (p1 === 'a' && transformedP2 === 'c') return returnLoss();
   if (p1 === 'b' && transformedP2 === 'a') return returnLoss();
   if (p1 === 'c' && transformedP2 === 'b') return returnLoss();
-  
+
   if (p1 === 'c' && transformedP2 === 'a') return returnWin();
   if (p1 === 'b' && transformedP2 === 'c') return returnWin();
   if (p1 === 'a' && transformedP2 === 'b') return returnWin();
@@ -49,8 +48,8 @@ const getEachScore = (data, task) => {
     p1LowerCase = p1.toLowerCase();
     p2LowerCase = p2.toLowerCase();
 
-    if(task==='task1') return getWinner(p1LowerCase, p2LowerCase);
-    if(task==='task2') return getOutcome(p1LowerCase, p2LowerCase);
+    if (task === 'task1') return getWinner(p1LowerCase, p2LowerCase);
+    if (task === 'task2') return getOutcome(p1LowerCase, p2LowerCase);
   });
 };
 
@@ -60,10 +59,10 @@ const getTotalScore = (data) => {
 
 const task2 = (data) => {
   let txtData = [];
-  if (!data) txtData = getData();
+  if (!data) txtData = getData(path.resolve(__dirname, './data.txt'));
   
   const eachScore = getEachScore(txtData.length ? txtData : data, 'task2');
-  return totalScore = getTotalScore(eachScore);
+  return (totalScore = getTotalScore(eachScore));
 };
 
 const getOutcome = (p1, outcome) => {
@@ -71,10 +70,12 @@ const getOutcome = (p1, outcome) => {
 
   outcomeScore = scoreForOutcome[transformedOutcome];
 
-  if(transformedOutcome === 'draw') return outcomeScore + scoreForShape[p1];
+  if (transformedOutcome === 'draw') return outcomeScore + scoreForShape[p1];
 
-  if(transformedOutcome === 'win') return outcomeScore + scoreForShape[winMap[p1]];
+  if (transformedOutcome === 'win')
+    return outcomeScore + scoreForShape[winMap[p1]];
 
-  if(transformedOutcome === 'loss') return outcomeScore + scoreForShape[lossMap[p1]];
+  if (transformedOutcome === 'loss')
+    return outcomeScore + scoreForShape[lossMap[p1]];
 };
 module.exports = { task1, task2 };

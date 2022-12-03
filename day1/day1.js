@@ -1,27 +1,19 @@
-const fs = require('fs');
+const { getData } = require('../utils/utils');
 const path = require('path');
 
 const task1 = (data) => {
   let txtData = [];
-  if (!data) {
-    txtData = getData();
-  }
+  if (!data) txtData = getData(path.resolve(__dirname, './data.txt'));
+
   return calculateResultTask1(txtData.length ? txtData : data);
 };
-
-const getData = () => {
-  return fs
-  .readFileSync(path.resolve(__dirname, './data.txt'), 'utf8')
-  .toString()
-  .split('\n');
-}
 
 const calculateResultTask1 = (data) => {
   let currentSum = 0;
   let largestSum = 0;
   data.forEach((d) => {
     if (d !== '') {
-      const num = Number(d)
+      const num = Number(d);
       currentSum += num;
     } else {
       if (currentSum > largestSum) largestSum = currentSum;
@@ -33,8 +25,8 @@ const calculateResultTask1 = (data) => {
 
 const task2 = (data) => {
   let txtData = [];
-  if(!data) txtData = getData();
-
+  if (!data) txtData = getData(path.resolve(__dirname, './data.txt'));
+  
   const summarisedData = summariseArray(txtData.length ? txtData : data);
   const topThreeElves = getTopThreeElves(summarisedData);
   return topThreeElves.reduce((a, b) => a + b, 0);
@@ -43,23 +35,21 @@ const task2 = (data) => {
 const summariseArray = (data) => {
   let newArray = [];
   let currentSum = 0;
-  data.forEach(d => {
+  data.forEach((d) => {
     if (d !== '') {
       const num = Number(d);
-      currentSum += num
+      currentSum += num;
     } else {
       newArray.push(currentSum);
       currentSum = 0;
     }
-  })
+  });
   return newArray;
-}
+};
 
 const getTopThreeElves = (data) => {
   const sortedData = data.sort((a, b) => b - a);
   return sortedData.slice(0, 3);
-}
+};
 
-module.exports = {task1, task2};
-
-// task1();
+module.exports = { task1, task2 };
