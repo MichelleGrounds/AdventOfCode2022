@@ -2,11 +2,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const getData = (filePath) => {
+const getData = (filePath, splitOn = '\n') => {
   return fs
     .readFileSync(path.resolve(__dirname, filePath), 'utf8')
     .toString()
-    .split('\n');
+    .split(splitOn);
 };
 
 module.exports = { getData };
